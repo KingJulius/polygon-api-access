@@ -68,7 +68,7 @@ class PolygonAPIAccess:
         # Enter name of database
         self.table_name = table_name
         # Function to populate data to table
-        self.access()
+        self.access(self.currency_pairs)
 
     def ts_to_datetime(self, ts) -> str:
         '''
