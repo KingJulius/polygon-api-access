@@ -1,0 +1,22 @@
+# Polygon API Access
+A library for accessing the POLYGON API secureley without exposing the Polygon API key.
+
+### Installation
+```
+pip install polygon-api-access
+```
+
+### Get started
+How to securely access the Polygon API without exposing the Polygon API key.
+
+First import class portfolio and then use code of a similar logic to access the Polygon API to display results.
+
+```Python
+from polygon_api_access import PolygonAPIAccess
+
+polygonAPIAccess = PolygonAPIAccess()
+
+currency_pairs = [["AUD","USD",[],portfolio("AUD","USD")]]
+
+print(polygonAPIAccess.access(currency_pairs))
+```
