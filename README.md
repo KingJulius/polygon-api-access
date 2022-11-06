@@ -1,5 +1,5 @@
 # Polygon API Access
-A library for accessing the POLYGON API secureley without exposing the Polygon API key.
+A library for accessing the POLYGON API securely without exposing the Polygon API key.
 
 ### Installation
 ```
