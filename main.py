@@ -1,5 +1,6 @@
 from polygon_api_access import PolygonAPIAccess
 from math import floor
+import os
 
 class portfolio(object):
     def __init__(self,from_,to):
@@ -35,8 +36,6 @@ class portfolio(object):
             print("There was not enough of the target currency (%s) to make another sell." % self.to)   
 
 
-polygonAPIAccess = PolygonAPIAccess()
-
 currency_pairs = [["AUD","USD",[],portfolio("AUD","USD")],
                   ["GBP","EUR",[],portfolio("GBP","EUR")],
                   ["USD","CAD",[],portfolio("USD","CAD")],
@@ -47,5 +46,7 @@ currency_pairs = [["AUD","USD",[],portfolio("AUD","USD")],
                   ["USD","CZK",[],portfolio("USD","CZK")],
                   ["USD","PLN",[],portfolio("USD","PLN")],
                   ["USD","INR",[],portfolio("USD","INR")]]
+
+polygonAPIAccess = PolygonAPIAccess(currency_pairs, os.getcwd(), "final_db")
 
 print(polygonAPIAccess.access(currency_pairs))

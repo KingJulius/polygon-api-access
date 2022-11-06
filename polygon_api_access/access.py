@@ -60,15 +60,14 @@ class PolygonAPIAccess:
     Class to protect the access to the API Key 
     '''
     def __init__(self, currency_pairs, location = os.getcwd(), table_name = "final_db"):
-        # The generated api  key specified in environment variable
-        self.key = "NoF9ibU8rVGrYHwwiK2fd9NJD87Z3GTE"
+        # The api key given by the professor
+        self.key = "beBybSi8daPgsTp5yx5cHtHpYcrjp5Jq"
         self.currency_pairs = currency_pairs
         # location to store the db file
         self.db_location = location
         # Enter name of database
         self.table_name = table_name
-        # Function to populate data to table
-        self.access(self.currency_pairs)
+        
 
     def ts_to_datetime(self, ts) -> str:
         '''

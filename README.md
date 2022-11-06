@@ -13,10 +13,13 @@ First import class portfolio and then use code of a similar logic to access the 
 
 ```Python
 from polygon_api_access import PolygonAPIAccess
+import os
 
 polygonAPIAccess = PolygonAPIAccess()
 
 currency_pairs = [["AUD","USD",[],portfolio("AUD","USD")]]
+
+polygonAPIAccess = PolygonAPIAccess(currency_pairs, os.getcwd(), "final_db")
 
 print(polygonAPIAccess.access(currency_pairs))
 ```
