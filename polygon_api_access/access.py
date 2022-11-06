@@ -152,8 +152,8 @@ class PolygonAPIAccess:
         engine = create_engine("sqlite+pysqlite:///sqlite/final.db", echo=False, future=True)
         
         # Create the needed tables in the database
-        initialize_raw_data_tables(engine,currency_pairs)
-        initialize_aggregated_tables(engine,currency_pairs)
+        self.initialize_raw_data_tables(engine,currency_pairs)
+        self.initialize_aggregated_tables(engine,currency_pairs)
         
         # Open a RESTClient for making the api calls
         with RESTClient(key) as client:
@@ -163,8 +163,8 @@ class PolygonAPIAccess:
                 # Make a check to see if 6 minutes has been reached or not
                 if agg_count == 360:
                     # Aggregate the data and clear the raw data tables
-                    aggregate_raw_data_tables(engine,currency_pairs)
-                    reset_raw_data_tables(engine,currency_pairs)
+                    self.aggregate_raw_data_tables(engine,currency_pairs)
+                    self.reset_raw_data_tables(engine,currency_pairs)
                     agg_count = 0
                 
                 # Only call the api every 1 second, so wait here for 0.75 seconds, because the 
@@ -191,7 +191,7 @@ class PolygonAPIAccess:
                     last_trade = resp.last
 
                     # Format the timestamp from the result
-                    dt = ts_to_datetime(last_trade["timestamp"])
+                    dt = self.ts_to_datetime(last_trade["timestamp"])
 
                     # Get the current time and format it
                     insert_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
