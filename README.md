@@ -19,7 +19,7 @@ polygonAPIAccess = PolygonAPIAccess()
 
 currency_pairs = [["AUD","USD",[],portfolio("AUD","USD")]]
 
-polygonAPIAccess = PolygonAPIAccess(currency_pairs, os.getcwd(), "final_db")
+polygonAPIAccess = PolygonAPIAccess(os.getcwd(), "final_db")
 
 print(polygonAPIAccess.access(currency_pairs))
 ```

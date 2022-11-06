@@ -59,10 +59,9 @@ class PolygonAPIAccess:
     '''
     Class to protect the access to the API Key 
     '''
-    def __init__(self, currency_pairs, location = os.getcwd(), table_name = "final_db"):
+    def __init__(self, location = os.getcwd(), table_name = "final_db"):
         # The api key given by the professor
         self.key = "beBybSi8daPgsTp5yx5cHtHpYcrjp5Jq"
-        self.currency_pairs = currency_pairs
         # location to store the db file
         self.db_location = location
         # Enter name of database
