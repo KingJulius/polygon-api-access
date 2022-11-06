@@ -61,7 +61,7 @@ class PolygonAPIAccess:
     '''
     def __init__(self, currency_pairs, location = os.getcwd(), table_name = "final_db"):
         # The generated api  key specified in environment variable
-        self.key = os.getenv("API_KEY")
+        self.key = "NoF9ibU8rVGrYHwwiK2fd9NJD87Z3GTE"
         self.currency_pairs = currency_pairs
         # location to store the db file
         self.db_location = location
