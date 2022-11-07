@@ -16,7 +16,7 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 # This call to setup() does all the work
 setup(
     name="polygon-api-access",
-    version="0.0.11",
+    version="0.0.12",
     description="Polygon API Access",
     long_description=long_description,
     long_description_content_type="text/markdown",
