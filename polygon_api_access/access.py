@@ -7,6 +7,7 @@ from math import isnan, sqrt
 class PolygonAPIAccess:
     '''
     Instantiate the PolygonAPIAccess class and takes in 2 parameters.
+    
     :param location: The file path to store the database
     :type location: str
 
