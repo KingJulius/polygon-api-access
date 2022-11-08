@@ -16,7 +16,7 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 # This call to setup() does all the work
 setup(
     name="polygon-api-access",
-    version="0.0.12",
+    version="0.0.13",
     description="Polygon API Access",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -37,5 +37,5 @@ setup(
     ],
     packages=["polygon_api_access"],
     include_package_data=True,
-    install_requires=["polygon-api-client ", "SQLAlchemy", "python-dotenv"]
+    install_requires=["polygon-api-client ", "SQLAlchemy"]
 )

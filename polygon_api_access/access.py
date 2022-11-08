@@ -2,66 +2,24 @@ import datetime
 import time
 from polygon import RESTClient
 from sqlalchemy import create_engine, text 
-from math import isnan, sqrt, floor
-from dotenv import load_dotenv
-import os
-
-class portfolio(object):
-    '''
-    We can buy, sell, or do nothing each time we make a decision.
-    This class defies a nobject for keeping track of our current investments/profits for each currency pair
-    '''
-    def __init__(self, from_, to):
-        # Initialize the 'From' currency amont to 1
-        self.amount = 1
-        self.curr2 = 0
-        self.from_ = from_
-        self.to = to
-        # We want to keep track of state, to see what our next trade should be
-        self.Prev_Action_was_Buy = False
-
-    def buy_curr(self, price):
-        '''
-        This defines a function to buy the 'To' currency. It will always buy the max amount, in whole number
-        increments
-        '''
-        if self.amount >= 1:
-            num_to_buy = floor(self.amount)
-            self.amount -= num_to_buy
-            self.Prev_Action_was_Buy = True
-            self.curr2 += num_to_buy * price
-            print(
-                "Bought %d worth of the target currency (%s). Our current profits and losses in the original currency (%s) are: %f." % (
-                num_to_buy, self.to, self.from_, (self.amount - 1)))
-        else:
-            print("There was not enough of the original currency (%s) to make another buy." % self.from_)
-
-    def sell_curr(self, price):
-        '''
-        This defines a function to sell the 'To' currency. It will always sell the max amount, in a whole number
-        increments
-        '''
-        if self.curr2 >= 1:
-            num_to_sell = floor(self.curr2)
-            self.amount += num_to_sell * (1 / price)
-            self.Prev_Action_was_Buy = False
-            self.curr2 -= num_to_sell
-            print(
-                "Sold %d worth of the target currency (%s). Our current profits and losses in the original currency (%s) are: %f." % (
-                num_to_sell, self.to, self.from_, (self.amount - 1)))
-        else:
-            print("There was not enough of the target currency (%s) to make another sell." % self.to)
-
-
-
+from math import isnan, sqrt
 
 class PolygonAPIAccess:
     '''
     Class to protect the access to the API Key 
     '''
     def __init__(self, location, table_name):
+        '''
+        Initialized the PolygonAPIAccess class and takes in 2 parameters.
+
+        :param location: The file path to store the database
+        :type location: str
+
+        :param table_name: Name of the database
+        :type table_name: str 
+        '''
         # The api key given by the professor
-        self.key = "beBybSi8daPgsTp5yx5cHtHpYcrjp5Jq"
+        self.key = "NoF9ibU8rVGrYHwwiK2fd9NJD87Z3GTE"
         # location to store the db file
         self.db_location = location
         # Enter name of database
@@ -70,7 +28,13 @@ class PolygonAPIAccess:
 
     def ts_to_datetime(self, ts) -> str:
         '''
-        Function slightly modified from polygon sample code to format the date string 
+        Function slightly modified from polygon sample code to format the date string
+
+        :param ts: Time Stamp
+        :type ts: datetime.date
+
+        :return: Formatted Time Stamp String
+        :rtype: str
         '''
         return datetime.datetime.fromtimestamp(ts / 1000.0).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -78,6 +42,12 @@ class PolygonAPIAccess:
     def reset_raw_data_tables(self, engine, currency_pairs):
         '''
         Function which clears the raw data tables once we have aggregated the data in a 6 minute interval
+
+        :param engine: Engine to connect to the database
+        :type engine: sqlalchemy.future.engine.Engine
+
+        :param currency_pairs: A dictionary defining the set of currency pairs we will be pulling data for
+        :type currency_pairs: list
         '''
         with engine.begin() as conn:
             for curr in currency_pairs:
@@ -88,6 +58,12 @@ class PolygonAPIAccess:
     def initialize_raw_data_tables(self, engine, currency_pairs):
         '''
         This creates a table for storing the raw, unaggregated price data for each currency pair in the SQLite database
+
+        :param engine: Engine to connect to the database
+        :type engine: sqlalchemy.future.engine.Engine
+
+        :param currency_pairs: A dictionary defining the set of currency pairs we will be pulling data for
+        :type currency_pairs: list
         '''
         with engine.begin() as conn:
             for curr in currency_pairs:
@@ -96,7 +72,13 @@ class PolygonAPIAccess:
         
     def initialize_aggregated_tables(self, engine, currency_pairs):
         '''
-        This creates a table for storing the (6 min interval) aggregated price data for each currency pair in the SQLite database 
+        This creates a table for storing the (6 min interval) aggregated price data for each currency pair in the SQLite database
+
+        :param engine: Engine to connect to the database
+        :type engine: sqlalchemy.future.engine.Engine
+
+        :param currency_pairs: A dictionary defining the set of currency pairs we will be pulling data for
+        :type currency_pairs: list 
         '''
         with engine.begin() as conn:
             for curr in currency_pairs:
@@ -106,6 +88,12 @@ class PolygonAPIAccess:
     def aggregate_raw_data_tables(self, engine, currency_pairs):
         '''
         This function is called every 6 minutes to aggregate the data, store it in the aggregate table, and then delete the raw data
+
+        :param engine: Engine to connect to the database
+        :type engine: sqlalchemy.future.engine.Engine
+
+        :param currency_pairs: A dictionary defining the set of currency pairs we will be pulling data for
+        :type currency_pairs: list
         '''
         with engine.begin() as conn:
             for curr in currency_pairs:
