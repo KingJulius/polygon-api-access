@@ -6,20 +6,16 @@ from math import isnan, sqrt
 
 class PolygonAPIAccess:
     '''
-    Class to protect the access to the API Key 
+    Instantiate the PolygonAPIAccess class and takes in 2 parameters.
+    :param location: The file path to store the database
+    :type location: str
+
+    :param table_name: Name of the database
+    :type table_name: str
     '''
     def __init__(self, location, table_name):
-        '''
-        Initialized the PolygonAPIAccess class and takes in 2 parameters.
-
-        :param location: The file path to store the database
-        :type location: str
-
-        :param table_name: Name of the database
-        :type table_name: str 
-        '''
         # The api key given by the professor
-        self.key = "NoF9ibU8rVGrYHwwiK2fd9NJD87Z3GTE"
+        self.key = "beBybSi8daPgsTp5yx5cHtHpYcrjp5Jq"
         # location to store the db file
         self.db_location = location
         # Enter name of database
