@@ -47,6 +47,7 @@ currency_pairs = [["AUD","USD",[],portfolio("AUD","USD")],
                   ["USD","PLN",[],portfolio("USD","PLN")],
                   ["USD","INR",[],portfolio("USD","INR")]]
 
-polygonAPIAccess = PolygonAPIAccess(os.getcwd(), "final_db")
+polygonAPIAccess = PolygonAPIAccess(os.getcwd(), "final.db")
 
-print(polygonAPIAccess.access(currency_pairs))
+# print(polygonAPIAccess.access(currency_pairs))
+print(polygonAPIAccess.access2(currency_pairs))
