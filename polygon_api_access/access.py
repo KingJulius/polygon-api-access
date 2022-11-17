@@ -3,6 +3,7 @@ import time
 from polygon import RESTClient
 from sqlalchemy import create_engine, text 
 from math import isnan, sqrt
+import requests
 
 class PolygonAPIAccess:
     '''
@@ -22,6 +23,17 @@ class PolygonAPIAccess:
         # Enter name of database
         self.table_name = table_name
         
+    def send_response(self, from_, to, amount, precision):
+        '''
+        Open a RESTClient for making the api calls
+        '''
+        url = "https://api.polygon.io/v1/conversion/" + from_ + "/" + to + "?" + "amount=" + str(amount) + "&precision=" + str(precision) + "&apiKey=" + self.key
+        response = requests.request("GET", url, headers={}, data={})
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return None
+
 
     def ts_to_datetime(self, ts) -> str:
         '''
@@ -195,50 +207,48 @@ class PolygonAPIAccess:
         self.initialize_raw_data_tables(engine,currency_pairs)
         self.initialize_aggregated_tables(engine,currency_pairs)
         
-        # Open a RESTClient for making the api calls
-        with RESTClient(self.key) as client:
-            # Loop that runs until the total duration of the program hits 24 hours. 
-            while count < 86400: # 86400 seconds = 24 hours
+
+        # Loop that runs until the total duration of the program hits 24 hours. 
+        while count < 86400: # 86400 seconds = 24 hours
                 
-                # Make a check to see if 6 minutes has been reached or not
-                if agg_count == 360:
-                    # Aggregate the data and clear the raw data tables
-                    self.aggregate_raw_data_tables(engine,currency_pairs)
-                    self.reset_raw_data_tables(engine,currency_pairs)
-                    agg_count = 0
+            # Make a check to see if 6 minutes has been reached or not
+            if agg_count == 360:
+                # Aggregate the data and clear the raw data tables
+                self.aggregate_raw_data_tables(engine,currency_pairs)
+                self.reset_raw_data_tables(engine,currency_pairs)
+                agg_count = 0
                 
-                # Only call the api every 1 second, so wait here for 0.75 seconds, because the 
-                # code takes about .15 seconds to run
-                time.sleep(0.75)
+            # Only call the api every 1 second, so wait here for 0.75 seconds, because the 
+            # code takes about .15 seconds to run
+            time.sleep(0.75)
                 
-                # Increment the counters
-                count += 1
-                agg_count +=1
+            # Increment the counters
+            count += 1
+            agg_count +=1
 
-                # Loop through each currency pair
-                for currency in currency_pairs:
-                    # Set the input variables to the API
-                    from_ = currency[0]
-                    to = currency[1]
+            # Loop through each currency pair
+            for currency in currency_pairs:
+                # Set the input variables to the API
+                from_ = currency[0]
+                to = currency[1]
 
-                    # Call the API with the required parameters
-                    try:
-                        resp = client.forex_currencies_real_time_currency_conversion(from_, to, amount=100, precision=2)
-                    except:
-                        continue
+                # Call the API with the required parameters
+                resp = self.send_response(from_, to, amount=100, precision=2)
+                if resp == None:
+                    continue
 
-                    # This gets the Last Trade object defined in the API Resource
-                    last_trade = resp.last
+                # This gets the Last Trade object defined in the API Resource
+                last_trade = resp["last"]
 
-                    # Format the timestamp from the result
-                    dt = self.ts_to_datetime(last_trade["timestamp"])
+                # Format the timestamp from the result
+                dt = self.ts_to_datetime(last_trade["timestamp"])
 
-                    # Get the current time and format it
-                    insert_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                # Get the current time and format it
+                insert_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     
-                    # Calculate the price by taking the average of the bid and ask prices
-                    avg_price = (last_trade['bid'] + last_trade['ask'])/2
+                # Calculate the price by taking the average of the bid and ask prices
+                avg_price = (last_trade['bid'] + last_trade['ask'])/2
 
-                    # Write the data to the SQLite database, raw data tables
-                    with engine.begin() as conn:
-                        conn.execute(text("INSERT INTO "+from_+to+"_raw(ticktime, fxrate, inserttime) VALUES (:ticktime, :fxrate, :inserttime)"),[{"ticktime": dt, "fxrate": avg_price, "inserttime": insert_time}])
+                # Write the data to the SQLite database, raw data tables
+                with engine.begin() as conn:
+                    conn.execute(text("INSERT INTO "+from_+to+"_raw(ticktime, fxrate, inserttime) VALUES (:ticktime, :fxrate, :inserttime)"),[{"ticktime": dt, "fxrate": avg_price, "inserttime": insert_time}])
