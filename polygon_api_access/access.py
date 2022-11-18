@@ -323,7 +323,7 @@ class PolygonAPIAccess:
         keltner_lower_band = []
 
         # Loop that runs until the total duration of the program hits 10 hours. 
-        while count < 10800: # 36000 seconds = 10 hours
+        while count < 36000: # 36000 seconds = 10 hours
                 
             # Make a check to see if 6 minutes has been reached or not
             if agg_count == 360:
