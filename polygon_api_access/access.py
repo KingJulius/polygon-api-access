@@ -304,9 +304,6 @@ class PolygonAPIAccess:
     
     def access(self, currency_pairs):
         '''
-        This access function repeatedly calls the polygon api every 1 seconds for 24 hours 
-        and stores the results.
-
         :param currency_pairs: A dictionary defining the set of currency pairs we will be pulling data for
         :type currency_pairs: list
         '''
@@ -325,8 +322,8 @@ class PolygonAPIAccess:
         keltner_upper_band = []
         keltner_lower_band = []
 
-        # Loop that runs until the total duration of the program hits 24 hours. 
-        while count < 86400: # 86400 seconds = 24 hours
+        # Loop that runs until the total duration of the program hits 10 hours. 
+        while count < 10800: # 36000 seconds = 10 hours
                 
             # Make a check to see if 6 minutes has been reached or not
             if agg_count == 360:
